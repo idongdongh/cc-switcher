@@ -38,7 +38,10 @@ if ($fzfAvailable) {
         --no-info `
         --separator="" `
         --pointer=" " `
-        --color="header:gray,hl:blue,hl+:blue,bg+:-1,fg+:blue,pointer:blue"
+        --preview="echo ''" `
+        --preview-window="down:1:noborder" `
+        --bind="load:+change-preview(echo '  Enter to confirm · Esc to exit')" `
+        --color="header:gray,hl:blue,hl+:blue,bg+:-1,fg+:blue,pointer:blue,preview-bg:-1,preview-fg:240"
     if ($selected) {
         $selectedName = ($selected -split "\s+")[0]
     }

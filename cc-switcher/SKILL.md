@@ -132,6 +132,21 @@ Add-Content $PROFILE "`nfunction cc { & `"$env:USERPROFILE\.claude\launch.ps1`" 
 
 `launch.sh` 和 `launch.ps1` 均动态扫描 providers 目录，新建文件后直接运行 `cc` 即可看到新条目，**无需修改脚本**。
 
+### 步骤 4：验证 alias 是否存在
+
+**macOS / Linux**：检查 `~/.zshrc` 是否包含 `alias cc=`，若不存在则追加：
+```bash
+echo "alias cc='~/.claude/launch.sh'" >> ~/.zshrc && source ~/.zshrc
+```
+
+**Windows PowerShell**：检查 `$PROFILE` 文件是否包含 `function cc`，若不存在则追加：
+```powershell
+if (-not (Select-String -Path $PROFILE -Pattern "function cc" -Quiet -ErrorAction SilentlyContinue)) {
+    Add-Content $PROFILE "`nfunction cc { & `"$env:USERPROFILE\.claude\launch.ps1`" @args }"
+    . $PROFILE
+}
+```
+
 ### 完成后告知用户
 
 > [提供商名] 已添加。运行 `cc` 重新启动即可选择新提供商。
