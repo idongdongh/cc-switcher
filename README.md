@@ -2,6 +2,9 @@
 
 > 在 Claude Code 中快速切换 AI 提供商 - 支持 Anthropic、DeepSeek、Qwen、OpenRouter、Gemini 等任意 Anthropic 兼容 API
 
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgray.svg)
+
 ## 功能特性
 
 - 🔄 **一键切换** - 通过交互式菜单在不同 AI 提供商间快速切换
@@ -12,23 +15,20 @@
 
 ## 安装方式
 
-### 方式一：使用内置命令（推荐）
-
-在 Claude Code 中运行：
-
-```bash
-/install github.com/idongdong/my-skills
-```
-
-### 方式二：手动安装
+### 方式一：Git 安装（推荐）
 
 ```bash
 # macOS / Linux
-git clone https://github.com/idongdong/my-skills.git ~/.claude/skills/my-skills
+git clone https://github.com/idongdongh/cc-switcher.git ~/.claude/skills/cc-switcher
 
 # Windows PowerShell
-git clone https://github.com/idongdong/my-skills.git "$env:USERPROFILE\.claude\skills\my-skills"
+git clone https://github.com/idongdongh/cc-switcher.git "$env:USERPROFILE\.claude\skills\cc-switcher"
 ```
+
+### 方式二：手动下载
+
+1. 下载本仓库代码
+2. 将 `cc-switcher` 文件夹放置在 `~/.claude/skills/` 目录下
 
 ## 使用方法
 
@@ -130,7 +130,22 @@ cc
 - Google Gemini
 - 其他兼容服务
 
+## 项目结构
+
+```
+cc-switcher/
+├── SKILL.md           # Skill 定义文件（Claude Code 识别此文件自动加载）
+└── scripts/
+    ├── launch.sh      # macOS / Linux 启动脚本
+    └── launch.ps1     # Windows PowerShell 启动脚本
+```
+
 ## 许可证
 
 MIT License
+
+## 链接
+
+- [GitHub 仓库](https://github.com/idongdongh/cc-switcher)
+- [Claude Code 官方文档](https://github.com/anthropics/claude-code)
 
