@@ -1,21 +1,20 @@
 # cc-switcher
 
-> 在 Claude Code 中快速切换 AI 提供商 - 支持 Anthropic、DeepSeek、Qwen、OpenRouter、Gemini 等任意 Anthropic 兼容 API
+> 在 Claude Code 中快速切换 AI 提供商 —— 支持 Anthropic、DeepSeek、Qwen、OpenRouter、Gemini 等任意 Anthropic 兼容 API
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgray.svg)
 
-## 功能特性
+## 它能做什么
 
-- 🔄 **一键切换** - 通过交互式菜单在不同 AI 提供商间快速切换
-- 📦 **多提供商管理** - 支持同时配置多个提供商，按需选择使用
-- 🖥️ **跨平台支持** - macOS、Linux、Windows 全覆盖
-- 🎨 **友好界面** - fzf 模糊搜索菜单，优雅降级体验
-- ⚡ **即开即用** - 配置一次，永久生效
+通过 Claude Code 对话，自动完成提供商的配置、切换和管理，无需手动编辑配置文件。
 
-## 安装方式
+- **首次配置**：自动创建目录结构、查询官方文档获取 Base URL 和模型 ID、写入配置文件、安装 `cc` 启动命令
+- **添加提供商**：联网查询新提供商的配置信息，只需提供 API Key
+- **删除提供商**：安全删除，若删除的是当前活跃提供商会提前提示
+- **一键切换**：运行 `cc` 通过 fzf 交互菜单选择提供商启动 Claude Code
 
-### 方式一：Git 安装（推荐）
+## 安装
 
 ```bash
 # macOS / Linux
@@ -25,14 +24,19 @@ git clone https://github.com/idongdongh/cc-switcher.git ~/.claude/skills/cc-swit
 git clone https://github.com/idongdongh/cc-switcher.git "$env:USERPROFILE\.claude\skills\cc-switcher"
 ```
 
-### 方式二：手动下载
+安装完成后无需额外操作，在 Claude Code 中对话即可触发。
 
-1. 下载本仓库代码
-2. 将 `cc-switcher` 文件夹放置在 `~/.claude/skills/` 目录下
+### 依赖
+
+**macOS / Linux**：需要 `fzf` 和 `jq`
+
+```bash
+brew install fzf jq
+```
+
+**Windows**：无强制依赖，PowerShell 原生支持 JSON；`fzf` 可选，未安装时自动降级为数字列表。
 
 ## 使用方法
-
-安装完成后，在 Claude Code 中通过自然语言对话使用本 skill。
 
 ### 首次配置
 
@@ -42,36 +46,28 @@ git clone https://github.com/idongdongh/cc-switcher.git "$env:USERPROFILE\.claud
 帮我配置 Claude Code 提供商
 ```
 
-或
+或直接说你想切换的目标：
 
 ```
-我想切换到 DeepSeek
+我想用 DeepSeek
 ```
 
-Claude Code 会自动识别 `cc-switcher` skill 并引导你完成：
+Skill 会自动完成以下所有步骤，中途只需你提供 API Key：
 
-1. 创建 `~/.claude/providers` 目录
-2. 查询提供商官方文档获取配置信息
-3. 向你确认 Base URL 和模型名
-4. 索要 API Key 并创建配置文件
-5. 复制启动脚本到 `~/.claude/launch.sh` (或 Windows 的 `launch.ps1`)
-6. 设置 `cc` 命令别名
+1. 创建 `~/.claude/providers/` 目录
+2. 联网查询提供商官方文档，获取 Base URL 和模型 ID
+3. 向你确认配置信息并索要 API Key
+4. 写入提供商配置文件
+5. 安装启动脚本（`~/.claude/launch.sh` 或 `launch.ps1`）
+6. 配置 `cc` 命令别名
 
-配置完成后，以后启动 Claude Code 只需输入 `cc`，脚本会列出所有提供商供你选择。
+配置完成后，以后启动 Claude Code 只需运行 `cc`。
 
 ### 添加新提供商
-
-已配置的情况下，直接告诉 Claude Code：
 
 ```
 帮我添加 OpenRouter 提供商
 ```
-
-Skill 会自动：
-- 联网查询官方文档获取 Base URL 和模型 ID
-- 向你确认配置信息
-- 索要 API Key
-- 创建 provider 配置文件
 
 ### 删除提供商
 
@@ -79,29 +75,21 @@ Skill 会自动：
 删除 OpenRouter 提供商
 ```
 
-如果该提供商当前正在使用，Claude Code 会提示你确认。
-
 ### 切换提供商
 
-配置完成后，有两种切换方式：
+**方式一（推荐）**：在终端运行 `cc`，通过交互菜单选择
 
-**方式一：通过 `cc` 命令（推荐）**
-```bash
-cc
-```
-会显示交互式菜单，用 fzf 选择提供商。
+**方式二**：在 Claude Code 中说
 
-**方式二：通过 Claude Code 对话**
 ```
 切换到 Qwen 提供商
 ```
 
+> **注意**：切换后必须**重启 Claude Code 窗口**才会生效。同时打开多个窗口时，请先退出所有窗口再运行 `cc`，否则可能导致 API Key 与模型不匹配。
+
 ## 配置文件格式
 
-提供商配置文件位于：
-
-- **macOS / Linux**: `~/.claude/providers/<公司名>.json`
-- **Windows**: `%USERPROFILE%\.claude\providers\<公司名>.json`
+提供商配置文件位于 `~/.claude/providers/<公司名>.json`（Windows：`%USERPROFILE%\.claude\providers\`）：
 
 ```json
 {
@@ -119,51 +107,34 @@ cc
 }
 ```
 
-### 字段说明
-
-| 字段 | 用途 |
+| 字段 | 说明 |
 |------|------|
-| `ANTHROPIC_AUTH_TOKEN` | API Key（Anthropic 官方可省略，第三方必须填写） |
+| `ANTHROPIC_AUTH_TOKEN` | API Key（Anthropic 官方可省略；第三方必须填写） |
 | `ANTHROPIC_BASE_URL` | 提供商的 Anthropic 兼容端点 |
 | `ANTHROPIC_DEFAULT_HAIKU_MODEL` | 轻量任务（后台操作、自动补全） |
-| `ANTHROPIC_SMALL_FAST_MODEL` | 同 Haiku，保证兼容性 |
+| `ANTHROPIC_SMALL_FAST_MODEL` | 同 Haiku，两者同时填写保证兼容性 |
 | `ANTHROPIC_DEFAULT_SONNET_MODEL` | 主对话（日常默认档位） |
 | `ANTHROPIC_DEFAULT_OPUS_MODEL` | 复杂任务（用户手动选择时） |
 | `ANTHROPIC_MODEL` | 总默认值，通常与 Sonnet 保持一致 |
 
-> **提示**：提供商只有一个模型时，四个模型字段填同一值即可。
-
-## 依赖
-
-- **macOS / Linux**: `fzf`、`jq`
-  ```bash
-  brew install fzf jq
-  ```
-- **Windows**: 无强制依赖（PowerShell 原生支持 JSON，fzf 可选）
-
-## 注意事项
-
-1. **重启生效**：切换提供商后需重启 Claude Code 窗口才会生效
-2. **避免冲突**：同时打开多个 Claude Code 窗口时，请先退出所有窗口再运行 `cc`，否则可能导致 API Key 与模型不匹配
-3. **参数透传**：`cc` 命令支持附加参数，例如 `cc --dangerously-skip-permissions`
-4. **技能触发**：本功能需要通过 Claude Code 的 skill 系统触发，不是独立的命令行工具
+提供商只有一个模型时，四个模型字段填同一值即可。
 
 ## 支持的提供商
 
-理论上支持任意 Anthropic API 兼容的第三方服务，已验证可用的包括：
+理论上支持任意 Anthropic API 兼容服务，已验证可用：
 
 - Anthropic（官方）
 - DeepSeek
 - Alibaba Cloud（通义千问）
 - OpenRouter
 - Google Gemini
-- 其他兼容服务
 
 ## 项目结构
 
 ```
 cc-switcher/
-├── SKILL.md           # Skill 定义文件（Claude Code 识别此文件自动加载）
+├── SKILL.md           # Skill 定义文件（Claude Code 自动加载）
+├── README.md          # 本文件
 └── scripts/
     ├── launch.sh      # macOS / Linux 启动脚本
     └── launch.ps1     # Windows PowerShell 启动脚本
@@ -172,9 +143,3 @@ cc-switcher/
 ## 许可证
 
 MIT License
-
-## 链接
-
-- [GitHub 仓库](https://github.com/idongdongh/cc-switcher)
-- [Claude Code 官方文档](https://github.com/anthropics/claude-code)
-
