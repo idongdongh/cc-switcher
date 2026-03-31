@@ -32,40 +32,68 @@ git clone https://github.com/idongdongh/cc-switcher.git "$env:USERPROFILE\.claud
 
 ## 使用方法
 
+安装完成后，在 Claude Code 中通过自然语言对话使用本 skill。
+
 ### 首次配置
 
-在 Claude Code 中触发 `cc-switcher` skill，或手动运行：
+在 Claude Code 中输入：
 
-```bash
-cc
+```
+帮我配置 Claude Code 提供商
 ```
 
-脚本将引导你完成：
+或
 
-1. 创建 providers 目录
-2. 配置首个 AI 提供商（需要 API Key）
-3. 复制启动脚本
-4. 设置 shell alias
+```
+我想切换到 DeepSeek
+```
+
+Claude Code 会自动识别 `cc-switcher` skill 并引导你完成：
+
+1. 创建 `~/.claude/providers` 目录
+2. 查询提供商官方文档获取配置信息
+3. 向你确认 Base URL 和模型名
+4. 索要 API Key 并创建配置文件
+5. 复制启动脚本到 `~/.claude/launch.sh` (或 Windows 的 `launch.ps1`)
+6. 设置 `cc` 命令别名
+
+配置完成后，以后启动 Claude Code 只需输入 `cc`，脚本会列出所有提供商供你选择。
 
 ### 添加新提供商
 
-配置完成后，在 Claude Code 中告诉它：
+已配置的情况下，直接告诉 Claude Code：
 
 ```
-帮我添加 DeepSeek 提供商
+帮我添加 OpenRouter 提供商
 ```
 
-系统会自动：
-
-- 查询官方文档获取配置信息
-- 向你确认 Base URL 和模型名
+Skill 会自动：
+- 联网查询官方文档获取 Base URL 和模型 ID
+- 向你确认配置信息
 - 索要 API Key
-- 创建配置文件
+- 创建 provider 配置文件
 
 ### 删除提供商
 
 ```
 删除 OpenRouter 提供商
+```
+
+如果该提供商当前正在使用，Claude Code 会提示你确认。
+
+### 切换提供商
+
+配置完成后，有两种切换方式：
+
+**方式一：通过 `cc` 命令（推荐）**
+```bash
+cc
+```
+会显示交互式菜单，用 fzf 选择提供商。
+
+**方式二：通过 Claude Code 对话**
+```
+切换到 Qwen 提供商
 ```
 
 ## 配置文件格式
@@ -115,9 +143,10 @@ cc
 
 ## 注意事项
 
-1. **重启生效**：切换提供商后需重启 Claude Code 窗口
-2. **避免冲突**：多个窗口同时运行时，请先退出所有窗口再运行 `cc`
-3. **参数透传**：支持附加参数，如 `cc --dangerously-skip-permissions`
+1. **重启生效**：切换提供商后需重启 Claude Code 窗口才会生效
+2. **避免冲突**：同时打开多个 Claude Code 窗口时，请先退出所有窗口再运行 `cc`，否则可能导致 API Key 与模型不匹配
+3. **参数透传**：`cc` 命令支持附加参数，例如 `cc --dangerously-skip-permissions`
+4. **技能触发**：本功能需要通过 Claude Code 的 skill 系统触发，不是独立的命令行工具
 
 ## 支持的提供商
 
